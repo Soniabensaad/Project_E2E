@@ -115,3 +115,45 @@ test('GET products per keyword', async ({ request }) => {
 expect(resultskey.length).toBeGreaterThan(0)
 console.log(resultskey)
   });
+
+
+  /*
+  Scenario 4 — Retrieve a product by ID
+
+Objective: Verify that a specific product can be retrieved using its ID.
+
+Steps:
+
+Send a request to retrieve the product with ID 1.
+Wait for the API response.
+Validate the product data.
+
+Expected Result:
+
+Status code should be 200.
+The response should return a single product object.
+The product ID should be 1.
+The product should include attributes like name and price
+   */
+test('GET products per ID', async ({ request }) => {
+  const response = await request.get(`${BASE_URL}/api/products`);
+  const body = await response.json();
+
+  expect(response.status()).toBe(200);
+  expect(Array.isArray(body)).toBeTruthy();
+
+  const targetId = 2;
+
+  const result = body.filter(product => product.id === targetId);
+
+  expect(result.length).toBeGreaterThan(0);
+
+  result.forEach(product => {
+    expect(product.id).toBe(targetId);
+    expect(product).toHaveProperty('name');
+    expect(product).toHaveProperty('price');
+    expect(product).toHaveProperty('category');
+  });
+
+  console.log(result);
+});
